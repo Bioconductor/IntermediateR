@@ -1,13 +1,15 @@
-# Intermediate R Software Development
+# Workshop: Intermediate R Software Development
 
 This is a series of meetings to enhance our understanding of R as a
 programming language, and to connect with other people interested in R
 software development. It is open to members of the Roswell Park and
-SUNY at Buffalo communities.
+SUNY at Buffalo communities. It is suitable for people who already
+know R, and are eager to develop a deeper understanding of the
+language and 'best practices' when tackling larger projects.
 
-There are six sessions, participants are expected to participate in
-all sessions. All sessions are 4-6 pm in the Gaylord Cary Meeting
-Room, Research Studies Center, Roswell Park.
+There are six sessions. Participants are expected to attend all
+sessions. All sessions are 4-6 pm in the Gaylord Cary Meeting Room,
+Research Studies Center, Roswell Park.
 
 [REGISTER for the course][1]
 
