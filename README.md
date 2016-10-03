@@ -11,7 +11,7 @@ There are six sessions. Participants are expected to attend all
 sessions. All sessions are 4-6 pm in the Gaylord Cary Meeting Room,
 Research Studies Center, Roswell Park.
 
-[APPLY for the course][1] (applications close at noon, 3 October)
+Applications CLOSED.
 
 ## Schedule (Tentative)
 
