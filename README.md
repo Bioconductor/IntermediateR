@@ -13,6 +13,29 @@ Research Studies Center, Roswell Park.
 
 Applications CLOSED.
 
+The first meeting is Wednesday, 5 October, at 4-6 pm in the Gaylord
+Cary Meeting Room, Research Studies Center, Roswell Park.
+
+## Preparation
+
+1. Please bring a laptop with wifi capabilities. Its a 2-hour session
+   so a charged battery should be ok; I'm not sure what the power
+   supply situation will be.
+
+2. Please have the following software installed:
+
+    - [R][] version 3.3.1
+    - [RStudio][]
+    - [git][]
+    
+   Please also install [devtools][]
+   
+            install.packages("devtools")
+            
+[R]: https://cran.r-project.org/
+[RStudio]: https://www.rstudio.com/products/rstudio/download3/
+[git]: https://git-scm.com/downloads
+
 ## Schedule (Tentative)
 
 Wednesday, 5 October
