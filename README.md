@@ -35,6 +35,7 @@ Cary Meeting Room, Research Studies Center, Roswell Park.
 [R]: https://cran.r-project.org/
 [RStudio]: https://www.rstudio.com/products/rstudio/download3/
 [git]: https://git-scm.com/downloads
+[devtools]: https://cran.r-project.org/package=devtools
 
 ## Schedule (Tentative)
 
