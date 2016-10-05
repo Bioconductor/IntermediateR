@@ -43,9 +43,9 @@ Cary Meeting Room, Research Studies Center, Roswell Park.
 [RStudio]: https://www.rstudio.com/products/rstudio/download3/
 [git]: https://git-scm.com/downloads
 [devtools]: https://cran.r-project.org/package=devtools
-[dplyr]: https://cran.r-project.org/package=devtools
-[data.table]: https://cran.r-project.org/package=devtools
-[ggplot2]: https://cran.r-project.org/package=devtools
+[dplyr]: https://cran.r-project.org/package=dplyr
+[data.table]: https://cran.r-project.org/package=data.table
+[ggplot2]: https://cran.r-project.org/package=ggplot2
 [SummarizedExperiment]: https://bioconductor.org/packages/SummarizedExperiment
 
 ## Schedule (Tentative)
