@@ -32,10 +32,21 @@ Cary Meeting Room, Research Studies Center, Roswell Park.
    
             install.packages("devtools")
             
+3. For session 2, please install [dplyr][], [data.table][],
+   [ggplot2][], and [SummarizedExperiment][]
+
+        install.packages(c("dplyr", "data.table", "ggplot2"))
+        source("https://bioconductor.org/biocLite.R")
+        biocLite("SummarizedExperiment")
+
 [R]: https://cran.r-project.org/
 [RStudio]: https://www.rstudio.com/products/rstudio/download3/
 [git]: https://git-scm.com/downloads
 [devtools]: https://cran.r-project.org/package=devtools
+[dplyr]: https://cran.r-project.org/package=devtools
+[data.table]: https://cran.r-project.org/package=devtools
+[ggplot2]: https://cran.r-project.org/package=devtools
+[SummarizedExperiment]: https://bioconductor.org/packages/SummarizedExperiment
 
 ## Schedule (Tentative)
 
