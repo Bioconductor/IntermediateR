@@ -42,7 +42,10 @@ Friday, 7 October
 - For session 2, please install [dplyr][], [data.table][],
   [reshape2][] [ggplot2][] and [SummarizedExperiment][]
 
-        install.packages(c("dplyr", "data.table", "reshape2", "ggplot2"))
+        install.packages(
+            c("dplyr", "data.table", "reshape2", "ggplot2"),
+            repos="https://cran.r-project.org"
+        )
         source("https://bioconductor.org/biocLite.R")
         biocLite("SummarizedExperiment")
 
