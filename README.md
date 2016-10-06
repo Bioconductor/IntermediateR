@@ -22,42 +22,32 @@ Cary Meeting Room, Research Studies Center, Roswell Park.
    so a charged battery should be ok; I'm not sure what the power
    supply situation will be.
 
-2. Please have the following software installed:
-
-    - [R][] version 3.3.1
-    - [RStudio][]
-    - [git][]
-    
-   Please also install [devtools][]
-   
-            install.packages("devtools")
-            
-3. For session 2, please install [dplyr][], [data.table][],
-   [ggplot2][], and [SummarizedExperiment][]
-
-        install.packages(c("dplyr", "data.table", "ggplot2"))
-        source("https://bioconductor.org/biocLite.R")
-        biocLite("SummarizedExperiment")
-
-[R]: https://cran.r-project.org/
-[RStudio]: https://www.rstudio.com/products/rstudio/download3/
-[git]: https://git-scm.com/downloads
-[devtools]: https://cran.r-project.org/package=devtools
-[dplyr]: https://cran.r-project.org/package=dplyr
-[data.table]: https://cran.r-project.org/package=data.table
-[ggplot2]: https://cran.r-project.org/package=ggplot2
-[SummarizedExperiment]: https://bioconductor.org/packages/SummarizedExperiment
-
 ## Schedule (Tentative)
 
 Wednesday, 5 October
 
 - Working with packages and github.
 
+- Please install [R][] version 3.3.1, [RStudio][], and [git][].
+
+- Please also install [devtools][].
+   
+        install.packages("devtools")
+
 Friday, 7 October
 
 - Classical, tidy, and rich approaches to data representation and
   analysis
+
+- For session 2, please install [dplyr][], [data.table][],
+  [reshape2][] [ggplot2][] and [SummarizedExperiment][]
+
+        install.packages(c("dplyr", "data.table", "reshape2", "ggplot2"))
+        source("https://bioconductor.org/biocLite.R")
+        biocLite("SummarizedExperiment")
+
+- Please also download the following plain-text files:
+  [ALL-expression.csv][], [ALL-phenoData.csv][]
 
 Wednesday, 12 October
 
@@ -76,3 +66,15 @@ Friday, 21 October
 - Reports, shiny applications, and interactive communication
 
 [1]: https://www.surveymonkey.com/r/ZHBSZ9H
+
+[R]: https://cran.r-project.org/
+[RStudio]: https://www.rstudio.com/products/rstudio/download3/
+[git]: https://git-scm.com/downloads
+[devtools]: https://cran.r-project.org/package=devtools
+[dplyr]: https://cran.r-project.org/package=dplyr
+[data.table]: https://cran.r-project.org/package=data.table
+[reshape2]: https://cran.r-project.org/package=reshape2
+[ggplot2]: https://cran.r-project.org/package=ggplot2
+[SummarizedExperiment]: https://bioconductor.org/packages/SummarizedExperiment
+[ALL-expression.csv]: https://github.com/Bioconductor/BiocIntroRPCI/raw/master/inst/extdata/ALL-expression.csv
+[ALL-phenoData.csv]: https://github.com/Bioconductor/BiocIntroRPCI/raw/master/inst/extdata/ALL-phenoData.csv
