@@ -88,6 +88,7 @@ Friday, 21 October
 [ggplot2]: https://cran.r-project.org/package=ggplot2
 [microbenchmark]: https://cran.r-project.org/package=microbenchmark
 [memoise]: https://cran.r-project.org/package=memoise
+[inline]: https://cran.r-project.org/package=inline
 [SummarizedExperiment]: https://bioconductor.org/packages/SummarizedExperiment
 [ALL-expression.csv]: https://github.com/Bioconductor/BiocIntroRPCI/raw/master/inst/extdata/ALL-expression.csv
 [ALL-phenoData.csv]: https://github.com/Bioconductor/BiocIntroRPCI/raw/master/inst/extdata/ALL-phenoData.csv
