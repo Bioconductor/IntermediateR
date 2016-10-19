@@ -62,6 +62,14 @@ Friday, 14 October
 
 Wednesday, 19 October
 
+- For session 5, please install [microbenchmark][], [memoise][], and
+  optionally [inline][]
+  
+        install.packages(
+            c("microbenchmark", "memoise", "inline")
+            repos="https://cran.r-project.org"
+        )
+
 - Writing efficient code
 
 Friday, 21 October
@@ -78,6 +86,8 @@ Friday, 21 October
 [data.table]: https://cran.r-project.org/package=data.table
 [reshape2]: https://cran.r-project.org/package=reshape2
 [ggplot2]: https://cran.r-project.org/package=ggplot2
+[microbenchmark]: https://cran.r-project.org/package=microbenchmark
+[memoise]: https://cran.r-project.org/package=memoise
 [SummarizedExperiment]: https://bioconductor.org/packages/SummarizedExperiment
 [ALL-expression.csv]: https://github.com/Bioconductor/BiocIntroRPCI/raw/master/inst/extdata/ALL-expression.csv
 [ALL-phenoData.csv]: https://github.com/Bioconductor/BiocIntroRPCI/raw/master/inst/extdata/ALL-phenoData.csv
