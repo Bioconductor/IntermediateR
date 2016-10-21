@@ -74,6 +74,8 @@ Wednesday, 19 October
 
 Friday, 21 October
 
+- For this session, please install [rmarkdown][] and [shiny][].
+
 - Reports, shiny applications, and interactive communication
 
 [1]: https://www.surveymonkey.com/r/ZHBSZ9H
@@ -89,6 +91,8 @@ Friday, 21 October
 [microbenchmark]: https://cran.r-project.org/package=microbenchmark
 [memoise]: https://cran.r-project.org/package=memoise
 [inline]: https://cran.r-project.org/package=inline
+[rmarkdown]: https://cran.r-project.org/package=rmarkdown
+[shiny]: https://cran.r-project.org/package=shiny
 [SummarizedExperiment]: https://bioconductor.org/packages/SummarizedExperiment
 [ALL-expression.csv]: https://github.com/Bioconductor/BiocIntroRPCI/raw/master/inst/extdata/ALL-expression.csv
 [ALL-phenoData.csv]: https://github.com/Bioconductor/BiocIntroRPCI/raw/master/inst/extdata/ALL-phenoData.csv
