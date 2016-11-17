@@ -1,0 +1,21 @@
+Package: IntermediateR
+Title: Training Material for Intermediate R Workshop
+Version: 0.0.1
+Authors@R: person(
+    "Martin", "Morgan",
+    email = "martin.morgan@roswellpark.org",
+    role = c("aut", "cre"))
+Description: This package contains material used during an
+    Intermediate R workshop. Topics include: (1) R package development
+    and management using github; (2) classic, tidy, and rich
+    approaches to data representation; (3) understanding classes and
+    methods; (4) unit tests and other programming best practices; (5)
+    writing efficient code; and (6) reports, shiny applications, and
+    interactive communication.
+Depends:
+    R (>= 3.4.0)
+Suggests:
+    knitr
+VignetteBuilder: knitr
+License: Artistic-2.0
+RoxygenNote: 5.0.1

@@ -1,0 +1,411 @@
+---
+title: "Workshop: Intermediate R Software Development"
+author: "Martin Morgan"
+date: "5 - 21 October , 2016"
+vignette: >
+  %\VignetteIndexEntry{Workshop: Intermediate R Software Development}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+---
+
+```{r setup, echo=FALSE}
+suppressPackageStartupMessages({
+    library(devtools)
+    library(roxygen2)
+})
+```
+
+This package grew out of a series of meetings to enhance our
+understanding of _R_ as a programming language, and to connect with
+other people interested in _R_ software development. It was open to
+members of the Roswell Park and SUNY at Buffalo communities. It is
+suitable for people who already know _R_, and are eager to develop a
+deeper understanding of the language and 'best practices' when
+tackling larger projects.
+
+# 1. Working with packages and github.
+
+The main objectives of this session are to write an [R][] package, and
+to use [github][] for version control.
+
+## _R_ packages
+
+An _R_ package is nothing more than an on-disk folder contains
+specific files and folders. A minimal package contains
+
+1. A text `DESCRIPTION` file with metadata (e.g., title, author,
+   description, license, package dependencies).
+2. A text `NAMESPACE` file. The NAMESPACE file describes the packages,
+   functions, methods, and classes imported (used by) the _R_ code in
+   the package. The NAMESPACE file also specifies which functions,
+   classes, methods, and data defined in the package are visible to
+   the user. A minimal NAMESPACE file contains nothing -- no symbols
+   are used from other packages, and no symbols defined in the package
+   are visible to the user.
+   
+### Exercise
+
+Create a nearly minimal _R_ package using the [devtools][] function
+`create`. We'll create the pacakge in a temporary directory, but do
+this in a permanent location.
+
+```{r}
+pkg <- file.path(tempdir(), "Elbo")
+devtools::create(pkg)
+```
+
+Check out the content of the directory
+
+```{r}
+dir(pkg, recursive=TRUE)
+```
+
+The `Elbo.Rproj` file is for use with [RStudio][], and is
+optional. The content of the `DESCRIPTION` file is
+
+```{r}
+cat(strwrap({
+    readLines(file.path(pkg, "DESCRIPTION"))
+}, exdent=4), sep="\n")
+```
+
+Usually, one would edit the file:
+
+- The Title: and Description: fields to describe the package.
+- The Authors@R: field provides a facility for enumerating one or
+  several authors.
+- The Version: field is meant to be incremented with each change to
+  the package; it allows users and developers to know precisely which
+  version of the package is in use. The [Bioconductor][] convention is
+  to use versions with format x.y.z, e.g., 0.0.1, 0.99.0, 1.0.0, 1.0.1
+- The License: field is used to describe the conditions under which
+  the pacakge is made available; one often chooses a standard license,
+  e.g., 'Artistic-2.0' or 'GPL 3'
+
+The package can actually be installed and loaded, e.g., using [devtools][]
+
+```{r}
+devtools::install(pkg)
+library(Elbo)
+```
+
+The package is now on the search path (at the second position)
+
+```{r}
+head(search())
+```
+
+but of course has no symbols available
+
+```{r}
+ls(pos=2)
+```
+
+## Version control
+
+During software development, one wants to be able to make changes to a
+package in a way that allows one to easily record what one has done,
+to revert back to a previous 'working' version if one ends up going
+down the wrong path, and to share the package with colleagues. 
+
+Version control enables each of these objects. [git][] is one version
+control system, it's made especially useful through the [github][]
+website.
+
+- Make sure that [git][] is installed on your system.
+- Create a user account on [github][]
+
+Each package we create will be managed as a github
+_repository_.
+
+- [Create a github repository][1], naming the repository after your
+  package.
+- [Add your Elbo package][2] to the repository
+
+There are two important steps taken when addign your package to the repository.
+
+1. _Commit_ to the local repository, `git commit ...`. One often makes
+   a number of commits to the local repository, perhaps after every
+   meaningful bit of code is produced -- several times an hour, for
+   instance.
+2. _Push_ a series of commits to the github repository `git push
+   ...`. This is often associate with the completion of a conceptual
+   feature, or perhaps at the end of the day.
+
+[1]: https://help.github.com/articles/create-a-repo/
+[2]: https://help.github.com/articles/adding-an-existing-project-to-github-using-the-command-line/
+
+## Package development: a first function
+
+Here's a simple function
+
+_R_ packages typically consist of _R_ functions. To add a function to
+your package,
+
+- Create a directory `R` inside the `Elbo` directory
+- Create a text file `hi.R` inside the `Elbo/R` directory
+
+```{r}
+dir.create(file.path(pkg, "R"))
+file.create(file.path(pkg, "R", "hi.R"))
+```
+
+We'll add the following function to the `hi.R` file:
+
+```
+hi <- function(who) {
+    paste("hello", who, "you have", nchar(who), "letters in your name!")
+}
+```
+
+A common practice uses the [roxygen2][] package to help document and
+manage functions in packages. The idea is to include a few lines of
+text above the function, using tags such as `@param` to indicate
+different parts of the documentation. Update the `hi.R` package, using
+a text editor of your choice, to read as follows:
+
+```
+#' Help start conversations
+#'
+#' This function generates some helpful text that can be used to start
+#' conversations in all kinds of awkward social situations.
+#'
+#' @param who character(1) The name of the person you wish to start a
+#'     conversation with.
+#'
+#' @return character(1) A line of text to be used when starting conversations.
+#'
+#' @examples
+#' hi("Martin Morgan")
+#'
+#' @export
+hi <- function(who) {
+    paste("hello", who, "you have", nchar(who), "letters in your name!")
+}
+```
+
+```{r, echo=FALSE}
+txt <- c(
+    "#' Help start conversations",
+    "#'",
+    "#' This function generates some helpful text that can be used to start",
+    "#' conversations in all kinds of awkward social situations.",
+    "#'",
+    "#' @param who character(1) The name of the person you wish to start a",
+    "#'     conversation with.",
+    "#'",
+    "#' @return character(1) A line of text to be used when starting conversations.",
+    "#'",
+    "#' @examples",
+    "#' hi('Martin Morgan')",
+    "#'",
+    "#' @export",
+    "hi <- function(who) {",
+    "    paste('hello', who, 'you have', nchar(who), 'letters in your name!')",
+    "}"
+)
+cat(txt, file=file.path(pkg, "R", "hi.R"), sep="\n")
+```
+Lines starting with `#'` are recognized by [roxygen2][]. The first
+line in this block becomes the help page title. The next paragraph is
+the `description` found on all help pages. 
+
+- The `@param` tag is used to define arguments, e.g., the `who`
+  argument is supposed to be a length 1 character vector, etc.
+- `@return` describes the return value of the function.
+- `@example` starts _R_ code that will be included in the `example`
+  section of the man page.
+- `@export` indicates that the function will be exported from the
+  package, hence visible to the user.
+
+We're now ready to compile the documentation
+
+```{r}
+devtools::document(pkg)
+```
+
+and install the updated package
+
+```{r}
+devtools::install(pkg)
+```
+
+If necessary, load the newly installed package and check out the
+functionality
+
+```{r}
+library(Elbo)
+head(search())
+ls(pos=2)
+hi("Martin")
+```
+
+Also check out our documentation
+
+```{r}
+?hi
+```
+
+## Version control!
+
+We've made some changes, so...
+
+- Update the version number, e.g., to 0.0.2
+- Add the new files to git
+- Review changes
+- Commit all changed files, including the updated DESCRIPTION file
+- Push the changes to github.
+
+```
+## cd Elbo
+## update Version in DESCRIPTION
+git add R/hi.R
+git diff
+git commit -a
+git push
+```
+
+These operations are also available via the [RStudio][] user
+interface.
+
+### Exercise
+
+Add an option `how` that will shout (upper case), whisper (lowercase),
+or say (no change) the user name. Implement the option as separate
+functions. Use `match.arg()` to select the mode of communication, and
+`switch()` to return the function to be applied when creating the
+return sentence. Update the documentation and add examples to the man
+page.
+
+My solution:
+
+I implemented the code as
+
+```
+hi <- function(who, how=c("say", "shout", "whisper")) {
+    how <- match.arg(how)
+    fun <- switch(how, say=say, shout=shout, whisper=whisper)
+    paste("hello", fun(who),  "you have", nchar(who), "letters in your name!")
+}
+
+say <- function(who) {
+    who
+}
+
+shout <- function(who) {
+    toupper(who)
+}
+
+whisper <- function(who) {
+    tolower(who)
+}
+```
+
+I updated the documentation by adding a `@param`...
+
+```
+#' @param how character(1) How to greet the conversant. Either "say"
+#'     (default, no change), "shout" (upper-case), "whisper" (lower-case)
+```
+
+...and updating the `@examples`
+
+```
+#' @examples
+#' hi("Martin Morgan")
+#' hi("Martin Morgan", "shout")
+#' hi("Martin Morgan", "whisper")
+```
+
+Update and install the package, and test it
+
+```{r, eval=FALSE}
+devtools::document(pkg)
+devtools::install(pkg)
+example(hi)
+```
+
+Review and commit changes and push to github
+
+```
+## update Version in DESCRIPTION
+git diff
+git commit -a
+git push
+```
+
+# 2. Classical, tidy, and rich approaches to data representation and analysis
+
+- For session 2, please install [dplyr][], [data.table][],
+  [reshape2][] [ggplot2][] and [SummarizedExperiment][]
+
+        install.packages(
+            c("dplyr", "data.table", "reshape2", "ggplot2"),
+            repos="https://cran.r-project.org"
+        )
+        source("https://bioconductor.org/biocLite.R")
+        biocLite("SummarizedExperiment")
+
+- Please also download the following plain-text files:
+  [ALL-expression.csv][], [ALL-phenoData.csv][]
+
+'Classic' data is represented as a `data.frame()` with
+samples as rows and features as columns.
+
+```{r, eval=FALSE}
+pdatafl = "~/a/Elbo/ALL-phenoData.csv"
+exprfl = "~/a/Elbo/ALL-expression.csv"
+classic <- input_classic(pdatafl, exprfl)
+classic[1:5, c(1:3, 22:24)]
+```
+
+One of the things we did was to plot the distribution of 
+expression values across genes
+
+```{r classic-exprs-hist, eval=FALSE}
+hist(colMeans(classic[, -(1:22)]))
+```
+
+# 3. Understanding classes and methods
+
+# 4. Unit tests and other programming best practices
+
+# 5. Writing efficient code
+
+- For session 5, please install [microbenchmark][], [memoise][], and
+  optionally [inline][]
+  
+        install.packages(
+            c("microbenchmark", "memoise", "inline")
+            repos="https://cran.r-project.org"
+        )
+
+# 6. Reports, shiny applications, and interactive communication
+
+- For this session, please install [rmarkdown][] and [shiny][].
+
+[R]: https://cran.r-project.org/
+[Bioconductor]: https://bioconductor.org/
+[RStudio]: https://www.rstudio.com/products/rstudio/download3/
+[git]: https://git-scm.com/downloads
+[devtools]: https://cran.r-project.org/package=devtools
+[dplyr]: https://cran.r-project.org/package=dplyr
+[data.table]: https://cran.r-project.org/package=data.table
+[reshape2]: https://cran.r-project.org/package=reshape2
+[ggplot2]: https://cran.r-project.org/package=ggplot2
+[microbenchmark]: https://cran.r-project.org/package=microbenchmark
+[memoise]: https://cran.r-project.org/package=memoise
+[inline]: https://cran.r-project.org/package=inline
+[rmarkdown]: https://cran.r-project.org/package=rmarkdown
+[shiny]: https://cran.r-project.org/package=shiny
+[SummarizedExperiment]: https://bioconductor.org/packages/SummarizedExperiment
+[ALL-expression.csv]: https://github.com/Bioconductor/BiocIntroRPCI/raw/master/inst/extdata/ALL-expression.csv
+[ALL-phenoData.csv]: https://github.com/Bioconductor/BiocIntroRPCI/raw/master/inst/extdata/ALL-phenoData.csv
+
+[1]: https://cran.r-project.org/package=devtools
+[roxygen2]: https://cran.r-project.org/package=roxygen2
+[github]: https://github.com
