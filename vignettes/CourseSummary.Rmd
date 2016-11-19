@@ -27,7 +27,7 @@ suitable for people who already know _R_, and are eager to develop a
 deeper understanding of the language and 'best practices' when
 tackling larger projects.
 
-# 1. Working with packages and github.
+# 1. Working with packages and github
 
 The main objectives of this session are to write an [R][] package, and
 to use [github][] for version control.
@@ -55,7 +55,7 @@ this in a permanent location.
 
 ```{r}
 pkg <- file.path(tempdir(), "Elbo")
-devtools::create(pkg)
+devtools::create(pkg, description=list(Version="0.0.1"))
 ```
 
 Check out the content of the directory
