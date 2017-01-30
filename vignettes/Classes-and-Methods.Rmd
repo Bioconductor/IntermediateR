@@ -1,0 +1,300 @@
+---
+title: "Workshop: Classes and Methods"
+author: "Martin Morgan"
+date: "31 January, 2017"
+vignette: >
+  %\VignetteIndexEntry{Workshop: Intermediate R Software Development}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+---
+
+```{r setup, echo=FALSE}
+suppressPackageStartupMessages({
+    library(devtools)
+    library(roxygen2)
+})
+copyto <- function(file, to) {
+    from <- system.file(package="IntermediateR", "snapshots", file)
+    if (!dir.exists(dirname(to)))
+        dir.create(to, recursive=TRUE)
+    file.copy(from, to, overwrite=TRUE)
+}
+```
+
+A _class_ is an _R_ object with a formal structure; think of classes
+as nouns.  A _generic_ and associated _methods_ are functions that
+transform nouns; think of generics and methods as verbs.
+
+_R_ has two main class systems, and these differ from class systems in
+many programming languages. The primary differences is that in _R_
+methods are associated with generics, whereas in other programming
+languages methods are associated with classes.
+
+# S3
+
+Consider this simple work flow
+
+```{r}
+x <- rnorm(10)
+y <- x + rnorm(10)
+df <- data.frame(X=x, Y=y)
+fit <- lm(Y ~ X, df)
+```
+
+`x` and `y` are examples of so-called 'atomic' vectors, the building
+blocks of _R_ data represenations. `df` is a `data.frame`, and is an
+example of an _R_ class -- an assembly of different atomic types
+(here, a list of numeric vectors, in this case) with an associated
+'class' attribute
+
+```{r}
+class(df)
+attributes(df)
+dput(df)
+```
+
+There are several reasons to introduce classes, including
+
+1. Enforcing constraints on class members, e.g., vectors in a
+   `data.frame` must be of equal length
+
+2. Providing functionality that would otherwise be tedious to
+   maintain, e.g., `row.names`.
+
+3. Separating the _implementation_ of the object from the way the user
+   interacts with the object's _interface_.
+
+The last point is a primary reason for use of classes, and can be seen
+in the `fit` object -- it has complicated internal structure that is
+somehow computationally conveient, but not really the business of the
+end user.
+
+```{r}
+str(fit)
+```
+
+Instead, the user can manipulate the object through it's interface,
+defined in part by the methods that operate on the class.
+
+```{r}
+methods(class=class(fit))
+anova(fit)
+```
+
+Some aspects of S3 classes and methods
+
+1. The `class` attribute determines what class an object is; there is
+   no formal class definition.
+
+2. Classes can have linear inheritance.  All the methods that apply to
+   an object of class `lm` can be used on `fit1`. There may be
+   additional methods that apply only to class `my`.
+
+    ```{r}
+    fit1 <- fit
+    class(fit1)
+    class(fit1) = c("my", class(fit1))
+    class(fit1)
+    ```
+
+3. A generic is a plain-old-function that has `UseMethod()` in it's body.
+
+    ```{r}
+    fun <- function(object, ...)
+        UseMethod("fun")
+    ```
+
+4. A method is a plain old function whose name is constructed by
+   pasting a generic function name and a S3 class name together.
+
+    ```{r}
+    fun.lm <- function(object, ...)
+        message("fun.lm method")
+    fun(fit)
+    fun(fit1)
+
+    fun.my <- function(object, ...)
+        message("fun.my method")
+    fun(fit)
+    fun(fit1)
+    ```
+
+5. Inheritance can be exploited in the function body using `NextMethod()`
+
+    ```{r}
+    fun.my <- function(object, ...) {
+        message("fun.my method")
+        NextMethod()
+    }
+    fun(fit1)
+    ```
+
+Classes, generics, and methods introduce some complexity, for instance
+getting help...
+
+- `?plot` returns the help for the plot generic and is, well, quite
+  generic.
+- `?plot.lm` returns the help for the `plot.lm` method, and is very
+  informative.
+
+... or finding source code
+
+- `plot` simply prints enough information to know that it is a generic
+- `plot.lm` is the method, but the method has not been exported from
+  the package (stats) where it is defined. To see the code, use
+  `stats:::plot.lm`.
+
+# S4
+
+The S4 system introduces
+
+- Formal class definitions
+- Multiple inheritance
+- Multiple dispatch
+
+Here's an S4 class definition representing people with first and last
+names.
+
+```{r}
+.Person <- setClass("Person",
+    slots=c(
+        first ="character",
+        last ="character"
+    )
+)
+```
+
+`setClass()` defines the class. It returns a 'generator' function that
+can be used to create an instance of the class. My _convention_ is to
+assign the generator to a variable named after the class and preceeded
+by a `.`. The reason is that the argument signature of the generator
+is not inforrmative for the user -- it consists of `...`, rather than
+named arguments. Thus my convention is to write a user-facing
+constructor
+
+```{r}
+Person <- function(firstname=character(), lastname=character()) {
+    .Person(first=firstname, last=lastname)
+}
+```
+
+Here's a people instance
+
+```{r}
+people <- Person(
+    firstname = c("George", "John", "Thomas"),
+    lastname = c("Washington", "Adams", "Jefferson")
+)
+```
+
+A new class often requires methods work with the data. To separate the
+implementation from the interface, we'll write a couple of 'accessor'
+functions that extract relevant components of the data. The accessors
+use knowledge of the class structure, but we will strive to make all
+other operations ignorant of implementation details.
+
+```{r}
+firstname <- function(x)
+    slot(x, "first")
+
+lastname <- function(x)
+    slot(x, "last")
+```
+
+We'll now implement `length()` and `show()` methods, using existing
+generics. The generics can be discovered with `getGeneric()`. For
+instance,
+
+```{r}
+getGeneric("length")
+```
+
+tells us that the method wee write should have a single argument
+`x`. Thus
+
+```{r}
+setMethod("length", "Person", function(x) {
+    length(firstname(x))  # use length of first name vector
+})
+
+setMethod("show", "Person", function(object) {
+    cat("class: ", class(object), "\n",
+        "length: ", length(object), " individuals\n",
+        sep="")
+})
+```
+
+Note that we use accessors rather than direct slot access.
+
+Here we implement a derived class, with an additional slot and accessor
+
+```{r}
+.President <- setClass("President",
+    contains = "Person",
+    slots = c(party = "character")
+)
+
+party <- function(x)
+    slot(x, "party")
+```
+
+There are two ways in which one can construct an object of this class
+
+```{r}
+.President(    # use base class to initialize...
+    people,
+    party = c("Unaffiliated", "Federalist", "Democratic-Republican")
+)
+
+.President(    # ... or initialize each slot
+    first = c("George", "John", "Thomas"),
+    last = c("Washington", "Adams", "Jefferson"),
+    party = c("Unaffiliated", "Federalist", "Democratic-Republican")
+)
+```
+
+We'll choose to implement a constructor that matches the latter
+
+```{r}
+President <- function(firstname=character(), lastname=character(),
+    party=character())
+{
+    .President(first=firstname, last=lastname, party=party)
+}
+```
+
+Note that we did not need to define `length()` or `show()` methods for
+our derived class.
+
+There are many additional features of S4 classes. A simple example is
+the 'validity' method, which can be used to impose constraints on the
+data.
+
+```{r}
+setValidity("Person", function(object) {
+    msg <- character()   # describe how the object is invalid
+
+    if (length(firstname(object)) != length(lastname(object)))
+        msg <- c(msg, "firstname() and lastname() lengths differ")
+    if (anyNA(firstname(object)) || anyNA(lastname(object)))
+        msg <- c(msg, "NA values not allowed in firstname() or lastname()")
+
+    if (length(msg)) msg else TRUE
+})
+
+setValidity("President", function(object) {
+    ## test only properties of President
+    msg <- character()
+
+    if (length(party(object)) != length(object))
+        msg <- c(msg, "party() length differs from person lengths")
+    if (anyNA(party(object)))
+        msg <- c(msg, "NA values not allowed in party()")
+
+    if (length(msg)) msg else TRUE
+})
+```
