@@ -1,0 +1,90 @@
+---
+title: "Workshop: Building Packages"
+author: "Martin Morgan"
+date: "31 January, 2017"
+vignette: >
+  %\VignetteIndexEntry{Workshop: Intermediate R Software Development}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+---
+
+```{r setup, echo=FALSE}
+suppressPackageStartupMessages({
+    library(devtools)
+    library(roxygen2)
+})
+```
+
+# 2. Classical, tidy, and rich approaches to data representation and analysis
+
+- For session 2, please install [dplyr][], [data.table][],
+  [reshape2][] [ggplot2][] and [SummarizedExperiment][]
+
+        install.packages(
+            c("dplyr", "reshape2", "ggplot2"),
+            repos="https://cran.r-project.org"
+        )
+        source("https://bioconductor.org/biocLite.R")
+        biocLite("SummarizedExperiment")
+
+- Please also download the following plain-text files:
+  [ALL-expression.csv][], [ALL-phenoData.csv][]
+
+'Classic' data is represented as a `data.frame()` with
+samples as rows and features as columns.
+
+```{r, eval=FALSE}
+pdatafl = "~/a/Elbo/ALL-phenoData.csv"
+exprfl = "~/a/Elbo/ALL-expression.csv"
+classic <- input_classic(pdatafl, exprfl)
+classic[1:5, c(1:3, 22:24)]
+```
+
+One of the things we did was to plot the distribution of
+expression values across genes
+
+```{r classic-exprs-hist, eval=FALSE}
+hist(colMeans(classic[, -(1:22)]))
+```
+
+# 5. Writing efficient code
+
+- For session 5, please install [microbenchmark][], [memoise][], and
+  optionally [inline][]
+
+        install.packages(
+            c("microbenchmark", "memoise", "inline")
+            repos="https://cran.r-project.org"
+        )
+
+# 6. Reports, shiny applications, and interactive communication
+
+- For this session, please install [rmarkdown][] and [shiny][].
+
+[R]: https://cran.r-project.org/
+[Bioconductor]: https://bioconductor.org/
+[RStudio]: https://www.rstudio.com/products/rstudio/download3/
+[git]: https://git-scm.com/downloads
+[github]: https://github.com
+[devtools]: https://cran.r-project.org/package=devtools
+[roxygen2]: https://cran.r-project.org/package=roxygen2
+
+[dplyr]: https://cran.r-project.org/package=dplyr
+[SummarizedExperiment]: https://bioconductor.org/packages/SummarizedExperiment
+[data.table]: https://cran.r-project.org/package=data.table
+[reshape2]: https://cran.r-project.org/package=reshape2
+[ggplot2]: https://cran.r-project.org/package=ggplot2
+
+[ALL-expression.csv]: https://github.com/Bioconductor/BiocIntroRPCI/raw/master/inst/extdata/ALL-expression.csv
+[ALL-phenoData.csv]: https://github.com/Bioconductor/BiocIntroRPCI/raw/master/inst/extdata/ALL-phenoData.csv
+
+[microbenchmark]: https://cran.r-project.org/package=microbenchmark
+[memoise]: https://cran.r-project.org/package=memoise
+[inline]: https://cran.r-project.org/package=inline
+
+[rmarkdown]: https://cran.r-project.org/package=rmarkdown
+[shiny]: https://cran.r-project.org/package=shiny
